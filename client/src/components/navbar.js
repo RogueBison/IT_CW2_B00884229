@@ -12,7 +12,7 @@ export default function Navbar() {
          <ul className="navbar-nav ml-auto">
            <li className="nav-item">
              <NavLink className="nav-link" to="/create">
-               Add a New Film
+               Add a New Document
              </NavLink>
            </li>
          </ul>
