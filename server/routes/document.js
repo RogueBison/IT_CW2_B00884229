@@ -23,6 +23,21 @@ documentRoutes.route("/document").get(async function (req, res) {
   }
 });
 
+// This section will help you get a single record by id
+documentRoutes.route("/document/:id").get(async function (req, res) {
+  try {
+    let db_connect = dbo.getDb();
+    let myquery = { _id: new ObjectId(req.params.id) };
+    let result = await db_connect.collection("users").findOne(myquery);
+
+    res.json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "An error occurred while fetching the record." });
+  }
+});
+
+
 documentRoutes.route("/document/add").post(async function (req, response) {
   try {
     let db_connect = dbo.getDb();
@@ -43,7 +58,7 @@ documentRoutes.route("/document/add").post(async function (req, response) {
 documentRoutes.route("/update/:id").post(async function (req, response) {
   try {
     let db_connect = dbo.getDb();
-    let myquery = { _id: ObjectId(req.params.id) };
+    let myquery = { _id: new ObjectId(req.params.id) };
     let newvalues = {
       $set: {
         name: req.body.name,
