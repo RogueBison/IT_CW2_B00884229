@@ -78,8 +78,7 @@ export default function Create() {
        </div>
        <div>
          <label htmlFor="description">Description</label>
-         <input
-           type="text"
+         <textarea
            id="description"
            value={form.description}
            onChange={(e) => updateForm({ description: e.target.value })}

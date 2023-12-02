@@ -11,9 +11,8 @@ const dbo = require("../db/conn");
 // This help convert the id from string to ObjectId for the _id.
 const ObjectId = require("mongodb").ObjectId;
  
- 
-// This section will get a list of all the film documents.
-documentRoutes.route("/document").get(async function (req, res) {
+
+async function getAllBooks (req, res) {
   try {
     const db_connect = await dbo.getDb("book_review_cw2");
     const result = await db_connect.collection("Books").find({}).toArray();
@@ -21,7 +20,10 @@ documentRoutes.route("/document").get(async function (req, res) {
   } catch (err) {
     throw err;
   }
-});
+}
+
+documentRoutes.route("/document").get(getAllBooks);
+documentRoutes.route("/document/admin").get(getAllBooks);
 
 // This section will help you get a single record by id
 documentRoutes.route("/document/:id").get(async function (req, res) {

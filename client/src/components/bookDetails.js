@@ -1,140 +1,71 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
- export default function Edit() {
-  
- const [form, setForm] = useState({
-  title: "",
-  authors: "",
-  genres: "",
-  rating: "",
-  description: "",
-  year: "",
- });
+const DocumentCard = ({ document }) => (
+  <div className="col-md-4 mb-3 d-flex justify-content-center">
+    <div className="card w-75">
+      <div className="d-flex justify-content-center align-items-center">
+      <img
+        src={`${process.env.PUBLIC_URL}/images/${document.path}`}
+        alt="book cover"
+        style={{width:'143px',height:'197px'}} 
+        className="card-img-top"
+      />
+      </div>
+      <div className="card-body">
+        <h4 className="card-title">{document.title}</h4>
+        <h5>Authors: </h5>
+        <p className="card-text">{document.authors}</p>
+        <h5>Genres: </h5>
+        <p className="card-text">{document.genres}</p>
+        <h5>Rating: </h5>
+        <p className="card-text">{document.rating}</p>
+        <h5>Description: </h5>
+        <p className="card-text">{document.description}</p>
+        <h5>Year Released: </h5>
+        <p className="card-text">{document.year}</p>
+      </div>
+    </div>
+  </div>
+);
 
- const params = useParams();
- const navigate = useNavigate();
+export default function Single() {
+  const [document, setDocument] = useState({});
+  const params = useParams();
 
   useEffect(() => {
-   async function fetchData() {
-     const id = params.id.toString();
-     const response = await fetch(`http://localhost:5000/document/${params.id.toString()}`);
+    async function fetchDocument() {
+      try {
+        const response = await fetch(`http://localhost:5000/document/${params.id}`);
 
-      if (!response.ok) {
-       const message = `An error has occurred: ${response.statusText}`;
-       window.alert(message);
-       return;
-     }
+        if (!response.ok) {
+          const message = `An error occurred: ${response.statusText}`;
+          window.alert(message);
+          return;
+        }
 
-      const document = await response.json();
-     if (!document) {
-       window.alert(`Document with id ${id} not found`);
-       navigate("/");
-       return;
-     }
+        const documentData = await response.json();
+        if (!documentData) {
+          window.alert(`Document with id ${params.id} not found`);
+          return;
+        }
 
-      setForm(document);
-   }
+        setDocument(documentData);
+      } catch (error) {
+        console.error("Error fetching document:", error);
+      }
+    }
 
-    fetchData();
+    fetchDocument();
+  }, [params.id]);
 
-    return;
- }, [params.id, navigate]);
-
-  // These methods will update the state properties.
- function updateForm(value) {
-   return setForm((prev) => {
-     return { ...prev, ...value };
-   });
- }
-  async function onSubmit(e) {
-   e.preventDefault();
-   const editedBook = {
-     title: form.title,
-     authors: form.authors,
-     genres: form.genres,
-     rating: form.rating,
-     description: form.description,
-     year: form.year,
-   };
-    // This will send a post request to update the data in the database.
-   await fetch(`http://localhost:5000/update/${params.id}`, {
-     method: "POST",
-     body: JSON.stringify(editedBook),
-     headers: {
-       'Content-Type': 'application/json'
-     },
-   });
-    navigate("/");
- }
-  // This following section will display the form that takes input from the user to update the data.
- return (
-   <div>
-     <h3>Edit Book</h3>
-     <form onSubmit={onSubmit}>
-       <div>
-         <label htmlFor="title">Title: </label>
-         <input
-           type="text"
-           id="title"
-           value={form.title}
-           onChange={(e) => updateForm({ title: e.target.value })}
-         />
-       </div>
-       <div>
-         <label htmlFor="authors">authors: </label>
-         <input
-           type="text"
-           id="authors"
-           value={form.authors}
-           onChange={(e) => updateForm({ authors: e.target.value })}
-         />
-       </div>
-       <div>
-         <label htmlFor="genres">Genres: </label>
-         <input
-           type="text"
-           id="genres"
-           value={form.genres}
-           onChange={(e) => updateForm({ genres: e.target.value })}
-         />
-       </div>
-       <div>
-         <label htmlFor="rating">Rating: </label>
-         <input
-           type="text"
-           id="rating"
-           value={form.rating}
-           onChange={(e) => updateForm({ rating: e.target.value })}
-         />
-       </div>
-       <div>
-         <label htmlFor="description">Description: </label>
-         <textarea
-           id="description"
-           value={form.description}
-           onChange={(e) => updateForm({ description: e.target.value })}
-         />
-       </div>
-       <div>
-         <label htmlFor="year">Year: </label>
-         <input
-           type="text"
-           id="year"
-           value={form.year}
-           onChange={(e) => updateForm({ year: e.target.value })}
-         />
-       </div>
-       <br />
- 
-       <div>
-         <input
-           type="submit"
-           value="UPDATE"
-           className="btn btn-primary"
-         />
-       </div>
-     </form>
-   </div>
- );
+  return (
+    <div>
+      <h3>Book Details for "{document.title}"</h3>
+      <div className="row">
+        {<DocumentCard document={document} />}
+      </div>
+    </div>
+  );
 }
+

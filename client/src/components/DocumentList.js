@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
 const Document = (props) => (
  <tr>
-   <td>{props.document.title}</td>
+   <td><Link to={`/single/${props.document._id}`}>{props.document.title}</Link></td>
    <td>{props.document.authors}</td>
    <td>{props.document.genres}</td>
    <td>{props.document.rating}</td>
    <td>{props.document.description}</td>
    <td>{props.document.year}</td>
-   <td><img src={`${process.env.PUBLIC_URL}/images/${props.document.path}`} alt="book cover" width="143" height="197"/></td>
+   <td>
+    <img src={`${process.env.PUBLIC_URL}/images/${props.document.path}`} alt="book cover" width="143" height="197"/>
+  </td>
    <td>
      <Link to={`/edit/${props.document._id}`}>Edit</Link>
+     <br />
      <button
        onClick={() => {
          props.deleteDocument(props.document._id);
@@ -69,7 +73,6 @@ export default function DocumentList() {
   // This following section will display the table with the records of individuals.
  return (
    <div>
-     <h3>All Books</h3>
      <table>
        <thead>
          <tr>
