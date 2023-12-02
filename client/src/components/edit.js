@@ -4,8 +4,12 @@ import { useParams, useNavigate } from "react-router";
  export default function Edit() {
   
  const [form, setForm] = useState({
-   name: "",
-   email: "",
+  title: "",
+  authors: "",
+  genres: "",
+  rating: "",
+  description: "",
+  year: "",
  });
 
  const params = useParams();
@@ -45,14 +49,18 @@ import { useParams, useNavigate } from "react-router";
  }
   async function onSubmit(e) {
    e.preventDefault();
-   const editedPerson = {
-     name: form.name,
-     email: form.email,
+   const editedBook = {
+     title: form.title,
+     authors: form.authors,
+     genres: form.genres,
+     rating: form.rating,
+     description: form.description,
+     year: form.year,
    };
     // This will send a post request to update the data in the database.
    await fetch(`http://localhost:5000/update/${params.id}`, {
      method: "POST",
-     body: JSON.stringify(editedPerson),
+     body: JSON.stringify(editedBook),
      headers: {
        'Content-Type': 'application/json'
      },
@@ -62,34 +70,67 @@ import { useParams, useNavigate } from "react-router";
   // This following section will display the form that takes input from the user to update the data.
  return (
    <div>
-     <h3>Edit Document</h3>
+     <h3>Edit Book</h3>
      <form onSubmit={onSubmit}>
-       <div className="form-group">
-         <label htmlFor="name">Name: </label>
+       <div>
+         <label htmlFor="title">Title: </label>
          <input
            type="text"
-           className="form-control"
-           id="name"
-           value={form.name}
-           onChange={(e) => updateForm({ name: e.target.value })}
+           id="title"
+           value={form.title}
+           onChange={(e) => updateForm({ title: e.target.value })}
          />
        </div>
-       <div className="form-group">
-         <label htmlFor="email">Email: </label>
+       <div>
+         <label htmlFor="authors">authors: </label>
          <input
            type="text"
-           className="form-control"
-           id="email"
-           value={form.email}
-           onChange={(e) => updateForm({ email: e.target.value })}
+           id="authors"
+           value={form.authors}
+           onChange={(e) => updateForm({ authors: e.target.value })}
+         />
+       </div>
+       <div>
+         <label htmlFor="genres">Genres: </label>
+         <input
+           type="text"
+           id="genres"
+           value={form.genres}
+           onChange={(e) => updateForm({ genres: e.target.value })}
+         />
+       </div>
+       <div>
+         <label htmlFor="rating">Rating: </label>
+         <input
+           type="text"
+           id="rating"
+           value={form.rating}
+           onChange={(e) => updateForm({ rating: e.target.value })}
+         />
+       </div>
+       <div>
+         <label htmlFor="description">Description: </label>
+         <textarea
+           id="description"
+           value={form.description}
+           onChange={(e) => updateForm({ description: e.target.value })}
+         />
+       </div>
+       <div>
+         <label htmlFor="year">Year: </label>
+         <input
+           type="text"
+           id="year"
+           value={form.year}
+           onChange={(e) => updateForm({ year: e.target.value })}
          />
        </div>
        <br />
  
-       <div className="form-group">
+       <div>
          <input
            type="submit"
-           value="Update"
+           value="UPDATE"
            className="btn btn-primary"
          />
        </div>

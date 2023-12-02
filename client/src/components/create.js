@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router";
 export default function Create() {
  const [form, setForm] = useState({
-    name: "",
-    email: "",
+    title: "",
+    authors: "",
+    genres: "",
+    rating: "",
+    description: "",
+    year: "",
  });
  const navigate = useNavigate();
   // These methods will update the state properties.
@@ -16,50 +20,84 @@ export default function Create() {
  async function onSubmit(e) {
    e.preventDefault();
     // When a post request is sent to the create url, we'll add a new document to the database.
-   const newPerson = { ...form };
+   const newBook = { ...form };
     await fetch("http://localhost:5000/document/add", {
      method: "POST",
      headers: {
        "Content-Type": "application/json",
      },
-     body: JSON.stringify(newPerson),
+     body: JSON.stringify(newBook),
    })
    .catch(error => {
      window.alert(error);
      return;
    });
-    setForm({ name: "", email: "" });
+    setForm({ title: "", authors: "", genres: "", rating: "", description: "", year: "" });
    navigate("/");
  }
   // This following section will display the form that takes the input from the user.
  return (
    <div>
-     <h3>Create New Document</h3>
+     <h3>Add a New Book</h3>
      <form onSubmit={onSubmit}>
-       <div className="form-group">
-         <label htmlFor="name">Name</label>
+       <div>
+         <label htmlFor="title">Title</label>
          <input
            type="text"
-           className="form-control"
-           id="name"
-           value={form.name}
-           onChange={(e) => updateForm({ name: e.target.value })}
+           id="title"
+           value={form.title}
+           onChange={(e) => updateForm({ title: e.target.value })}
          />
        </div>
-       <div className="form-group">
-         <label htmlFor="email">Email</label>
+       <div>
+         <label htmlFor="authors">Authors</label>
          <input
            type="text"
-           className="form-control"
-           id="email"
-           value={form.email}
-           onChange={(e) => updateForm({ email: e.target.value })}
+           id="authors"
+           value={form.authors}
+           onChange={(e) => updateForm({ authors: e.target.value })}
          />
        </div>
-       <div className="form-group">
+       <div>
+         <label htmlFor="genres">Genres</label>
+         <input
+           type="text"
+           id="genres"
+           value={form.genres}
+           onChange={(e) => updateForm({ genres: e.target.value })}
+         />
+       </div>
+       <div>
+         <label htmlFor="rating">Rating</label>
+         <input
+           type="text"
+           id="rating"
+           value={form.rating}
+           onChange={(e) => updateForm({ rating: e.target.value })}
+         />
+       </div>
+       <div>
+         <label htmlFor="description">Description</label>
+         <input
+           type="text"
+           id="description"
+           value={form.description}
+           onChange={(e) => updateForm({ description: e.target.value })}
+         />
+       </div>
+       <div>
+         <label htmlFor="year">Year</label>
+         <input
+           type="text"
+           id="year"
+           value={form.year}
+           onChange={(e) => updateForm({ year: e.target.value })}
+         />
+       </div>
+       <div>
          <input
            type="submit"
-           value="Create Document"
+           value="CREATE"
            className="btn btn-primary"
          />
        </div>

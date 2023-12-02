@@ -15,8 +15,8 @@ const ObjectId = require("mongodb").ObjectId;
 // This section will get a list of all the film documents.
 documentRoutes.route("/document").get(async function (req, res) {
   try {
-    const db_connect = await dbo.getDb("sample_mflix");
-    const result = await db_connect.collection("users").find({}).toArray();
+    const db_connect = await dbo.getDb("book_review_cw2");
+    const result = await db_connect.collection("Books").find({}).toArray();
     res.json(result);
   } catch (err) {
     throw err;
@@ -28,7 +28,7 @@ documentRoutes.route("/document/:id").get(async function (req, res) {
   try {
     let db_connect = dbo.getDb();
     let myquery = { _id: new ObjectId(req.params.id) };
-    let result = await db_connect.collection("users").findOne(myquery);
+    let result = await db_connect.collection("Books").findOne(myquery);
 
     res.json(result);
   } catch (err) {
@@ -42,11 +42,15 @@ documentRoutes.route("/document/add").post(async function (req, response) {
   try {
     let db_connect = dbo.getDb();
     let myobj = {
-      name: req.body.name,
-      email: req.body.email,
+      title: req.body.title,
+      authors: req.body.authors,
+      genres: req.body.genres,
+      rating: req.body.rating,
+      description: req.body.description,
+      year: req.body.year,
     };
 
-    const result = await db_connect.collection("users").insertOne(myobj);
+    const result = await db_connect.collection("Books").insertOne(myobj);
 
     response.json(result);
   } catch (err) {
@@ -61,12 +65,16 @@ documentRoutes.route("/update/:id").post(async function (req, response) {
     let myquery = { _id: new ObjectId(req.params.id) };
     let newvalues = {
       $set: {
-        name: req.body.name,
-        email: req.body.email,
+        title: req.body.title,
+        authors: req.body.authors,
+        genres: req.body.genres,
+        rating: req.body.rating,
+        description: req.body.description,
+        year: req.body.year,
       },
     };
 
-    const result = await db_connect.collection("users").updateOne(myquery, newvalues);
+    const result = await db_connect.collection("Books").updateOne(myquery, newvalues);
 
     console.log("1 document updated");
     response.json(result);
@@ -81,7 +89,7 @@ documentRoutes.route("/:id").delete(async (req, response) => {
     let db_connect = dbo.getDb();
     let myquery = { _id: new ObjectId(req.params.id) };
 
-    const result = await db_connect.collection("users").deleteOne(myquery);
+    const result = await db_connect.collection("Books").deleteOne(myquery);
 
     if (result.deletedCount === 1) {
       console.log("1 document deleted");
